@@ -354,5 +354,7 @@ def day5(inputData):
         # print('\nafter:')
         # for stackIdx in stackIndices:
         #     print(stackIdx, stacks[stackIdx])
-# LJSVLTWQM 1
-# BRQWDBBJM 2
+
+def day6(inputData):
+    with open(inputData) as file:
+        lines = [line.rstrip() for line in file]
