@@ -405,7 +405,7 @@ def day7(inputData):
     # tracking variables
     currentDirectory = None
     parentOfCurrent = None
-    
+    dirsExplored = []
 
     for line in lines:
         print(line)
@@ -426,7 +426,12 @@ def day7(inputData):
 
         elif line[0:4] == '$ ls':
             # next line will provide information; this line can be ignored
-            pass
+            if currentDirectory in dirsExplored:
+                dirAlreadyExplored = True
+            else:
+                dirAlreadyExplored = False
+                dirsExplored.append(currentDirectory)
+
 
         elif line[0:3] == 'dir':
             # current line provides information about a child of currentDirectory
@@ -443,10 +448,15 @@ def day7(inputData):
 
         elif line[0].isnumeric():
             # current line provides information about a file
-            if currentDirectory in dirFileContents.keys():
-                dirFileContents[currentDirectory] += int(line.split(' ')[0])
-            else:
-                dirFileContents[currentDirectory] = int(line.split(' ')[0])
+            # do NOT increment the file size counter again if dirAlreadyExplored
+            if not dirAlreadyExplored:
+                if currentDirectory in dirFileContents.keys():
+                    dirFileContents[currentDirectory] += int(line.split(' ')[0])
+                else:
+                    dirFileContents[currentDirectory] = int(line.split(' ')[0])
+
+            # else, dir already explored, pass
+
         else:  # unexepcted input type (not cd or ls)
             print(f'Unexpected input: {line}')
             raise
