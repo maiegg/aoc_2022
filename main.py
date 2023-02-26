@@ -5,4 +5,5 @@ from dailies import *
 # day3('data/day3input.txt')
 # day4('data/day4input.txt')
 # day5('data/day5input.txt')
-day6('data/day6input.txt')
+# day6('data/day6input.txt')
+day7('data/day7input.txt')

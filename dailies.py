@@ -380,3 +380,80 @@ def day6(inputData):
         if len(set(lastFour)) == 14:
             print(f'Part 2: {lastFour} found after scanning {endIdx} characters')
             break
+
+def day7(inputData):
+    with open(inputData) as file:
+        lines = [line.rstrip() for line in file]
+
+    """
+    goal: to print total size of all directories below a certain size 
+    
+    - keep a list of all directories
+    - keep a dictionary of each directory and its own file sizes
+    - keep a dictionary of each directory and its child directories
+    
+    - loop trough list of directories, adding child directory sizes to content sizes
+    
+    """
+    lines = lines[0:10]
+
+    # output variables
+    dirFileContents = {}  # (dir : total file contents [size])
+    dirChildren = {}  # (dir : list of children)
+    dirParents = {}  # dir : parent dir)
+
+    # tracking variables
+    currentDirectory = None
+    parentOfCurrent = None
+    
+
+    for line in lines:
+        print(line)
+        if line == '$ cd ..':
+            # current line is changing position; need to update orientation variables
+            currentDirectory = parentOfCurrent
+            parentOfCurrent = dirParents[currentDirectory]
+
+        elif line[0:4] == '$ cd':
+            # current line is changing position; need to update orientation variables
+            child = line.split('$ cd')[1]
+            if child in dirParents.keys():
+                pass
+            else:
+                dirParents[child] = currentDirectory
+            parentOfCurrent = currentDirectory
+            currentDirectory = child
+
+        elif line[0:4] == '$ ls':
+            # next line will provide information; this line can be ignored
+            pass
+
+        elif line[0:3] == 'dir':
+            # current line provides information about a child of currentDirectory
+            # update dirChildren to describe this relationship if not already
+            if currentDirectory in dirChildren.keys():
+                describedDir = line.split('dir')[1]
+                if describedDir in dirChildren[currentDirectory]:
+                    pass
+                else:
+                    dirChildren[currentDirectory].append(describedDir)
+                del describedDir
+            else:
+                dirChildren[currentDirectory] = [line.split('dir ')[1]]
+
+        elif line[0].isnumeric():
+            # current line provides information about a file
+            if currentDirectory in dirFileContents.keys():
+                dirFileContents[currentDirectory] += int(line.split(' ')[0])
+            else:
+                dirFileContents[currentDirectory] = int(line.split(' ')[0])
+        else:  # unexepcted input type (not cd or ls)
+            print(f'Unexpected input: {line}')
+            raise
+
+    print('\n')
+    print(dirFileContents)
+    print(dirChildren)
+    print(dirParents)
+
+    # for all directories visited,
