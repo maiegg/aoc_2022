@@ -416,7 +416,7 @@ def day7(inputData):
 
         elif line[0:4] == '$ cd':
             # current line is changing position; need to update orientation variables
-            child = line.split('$ cd')[1]
+            child = line.split('$ cd ')[1]
             if child in dirParents.keys():
                 pass
             else:
@@ -437,7 +437,7 @@ def day7(inputData):
             # current line provides information about a child of currentDirectory
             # update dirChildren to describe this relationship if not already
             if currentDirectory in dirChildren.keys():
-                describedDir = line.split('dir')[1]
+                describedDir = line.split('dir ')[1]
                 if describedDir in dirChildren[currentDirectory]:
                     pass
                 else:
@@ -470,8 +470,10 @@ def day7(inputData):
     calculate a total directory size for each directory explored
     """
     dirTotalSize = {}
-    for thisdir in dirsExplored:
+    # for thisdir in dirsExplored:
+    for thisdir in ['/']:
         # start with 0
+        print('output:')
         dirTotalSize[thisdir] = 0
 
         # add the sizes of any files in directory
@@ -479,14 +481,17 @@ def day7(inputData):
             dirTotalSize[thisdir] += dirFileContents[thisdir]
 
         # the hard part - recursively add up all the dir's descendants' sizes
+        # print(thisdir)
         if thisdir in dirChildren.keys():
             allDescendantDirs = []
 
-            children = dirChildren[thisdir] # list of children
+            children = dirChildren[thisdir]  # list of children
 
             for child in children:
+                # print(child, children)
                 allDescendantDirs.append(child)
                 if child in dirChildren.keys():
-                    children.append(child)
+                    print('!!!', child)
+                    children.extend(dirChildren[child])
 
             print(thisdir, allDescendantDirs)
