@@ -395,7 +395,7 @@ def day7(inputData):
     - loop trough list of directories, adding child directory sizes to content sizes
     
     """
-    lines = lines[0:10]
+    lines = lines[0:13]
 
     # output variables
     dirFileContents = {}  # (dir : total file contents [size])
@@ -466,4 +466,27 @@ def day7(inputData):
     print(dirChildren)
     print(dirParents)
 
-    # for all directories visited,
+    """
+    calculate a total directory size for each directory explored
+    """
+    dirTotalSize = {}
+    for thisdir in dirsExplored:
+        # start with 0
+        dirTotalSize[thisdir] = 0
+
+        # add the sizes of any files in directory
+        if thisdir in dirFileContents.keys():
+            dirTotalSize[thisdir] += dirFileContents[thisdir]
+
+        # the hard part - recursively add up all the dir's descendants' sizes
+        if thisdir in dirChildren.keys():
+            allDescendantDirs = []
+
+            children = dirChildren[thisdir] # list of children
+
+            for child in children:
+                allDescendantDirs.append(child)
+                if child in dirChildren.keys():
+                    children.append(child)
+
+            print(thisdir, allDescendantDirs)
