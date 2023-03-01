@@ -9,22 +9,35 @@ def run(inputData):
     currentDirectory = None
     parentOfCurrent = None
 
+    # assume that you always start in "/"
+
+    currentDirectory = ''
+    dirParents = {}
+    dirParents['/'] = '/'
+
     for line in lines:
+
         if line == '$ cd ..':
-            # current line is changing position; need to update orientation variables
-            currentDirectory = parentOfCurrent
-            parentOfCurrent = dirParents[currentDirectory]
+            if currentDirectory == '/':
+                pass
+            else:
+                currentDirectory = parentOfCurrent
+                parentOfCurrent = dirParents[currentDirectory]
 
         elif line[0:4] == '$ cd':
-            pass
-            # current line is changing position; need to update orientation variables
-            child = line.split('$ cd ')[1]
+            child = currentDirectory + '/' + line.split('$ cd ')[1]
+            dirsExplored.append(child)
             if child in dirParents.keys():
                 pass
             else:
                 dirParents[child] = currentDirectory
+
             parentOfCurrent = currentDirectory
-            currentDirectory = child
+
+            if (currentDirectory == '') & (line == '$ cd /'):
+                currentDirectory = '/'
+            else:
+                currentDirectory = currentDirectory + '/' + line.split('$ cd ')[1]
 
         elif line[0:4] == '$ ls':
             # next line will provide information; this line can be ignored
@@ -56,8 +69,6 @@ def run(inputData):
         else:  # unexepcted input type (not cd or ls)
             print(f'Unexpected input: {line}')
             raise
-
-    print(dirsExplored)
     dirTotalSize = {}
     for exploredDir in dirsExplored:
         print(f'{exploredDir} = exploredDir')
@@ -84,13 +95,11 @@ def run(inputData):
         if exploredDir in dirFileContents.keys():
             size = sum([int(item.split(' ')[0]) for item in dirFileContents[exploredDir]])
             dirTotalSize[exploredDir] += size
-    print('!!!')
-    print(dirTotalSize)
 
     runningTotal = 0
     for k in dirTotalSize.keys():
         if (dirTotalSize[k] <= 100000):
             runningTotal += dirTotalSize[k]
 
-
     print(f'Total size of qualified directories is {runningTotal:,}')
+    print(dirFileContents)
