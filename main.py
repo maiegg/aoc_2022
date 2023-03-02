@@ -13,4 +13,4 @@ import dailySolutions.day7
 # dailySolutions.day4.run('data/day4input.txt')
 # dailySolutions.day5.run('data/day5input.txt')
 # dailySolutions.day6.run('data/day6input.txt')
-dailySolutions.day7.run('data/day7test.txt')
+dailySolutions.day7.run('data/day7input.txt')
