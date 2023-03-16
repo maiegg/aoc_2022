@@ -1,4 +1,4 @@
-def day9(inputData):
+def run(inputData):
     # read txt file into list (1 entry per line)
     with open(inputData) as file:
         lines = [line.rstrip() for line in file]
@@ -17,7 +17,7 @@ def day9(inputData):
 
         :param current_pos: tuple of current (x,y) position
         :param dirr: direction of instructed movement
-        :param distance: distance of instructed movement
+        :param dist: distance of instructed movement
         :return: new position (x,y)
         """
 
