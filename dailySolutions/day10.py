@@ -12,11 +12,6 @@ def day10(inputData):
     execution_queue = []
     signal_strengths = []
 
-    instructions_wrapped = instructions.copy()
-    while len(instructions_wrapped) <= 220:
-        instructions_wrapped.extend(instructions)
-
-
     for idx in range(222):
         cycle_number += 1
         # print(cycle_number)
